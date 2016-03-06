@@ -2,10 +2,11 @@ package net.nonylene.stacker;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -25,6 +26,8 @@ import okhttp3.Response;
 
 public class MainActivity extends AppCompatActivity {
 
+    private QuestionsRecyclerAdapter mQuestionsRecyclerAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +43,11 @@ public class MainActivity extends AppCompatActivity {
                 requestApi(searchText);
             }
         });
+
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mQuestionsRecyclerAdapter = new QuestionsRecyclerAdapter();
+        recyclerView.setAdapter(mQuestionsRecyclerAdapter);
     }
 
     private void requestApi(String text) {
@@ -79,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            Toast.makeText(MainActivity.this, questions.get(0).title, Toast.LENGTH_LONG).show();
+                            mQuestionsRecyclerAdapter.setQuestionList(questions);
                         }
                     });
 
