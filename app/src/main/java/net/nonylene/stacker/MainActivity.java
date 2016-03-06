@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
         } catch (UnsupportedEncodingException ignore) {}
 
         String url = "https://api.stackexchange.com/2.2/search?order=desc&sort=activity&intitle=" +
-                encodedText + "&site=stackoverflow&filter=!6JEajsykLFu7H";
+                encodedText + "&site=stackoverflow&filter=!6JEajsykLFu3W";
 
         Request request = new Request.Builder()
                 .url(url)
