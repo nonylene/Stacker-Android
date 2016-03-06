@@ -7,9 +7,15 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -58,12 +64,26 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call call, final Response response) throws IOException {
                 final String body = response.body().string();
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        Toast.makeText(MainActivity.this, body, Toast.LENGTH_LONG).show();
+
+                try {
+                    JSONObject json = new JSONObject(body);
+
+                    JSONArray questionsJson = json.getJSONArray("items");
+
+                    final List<Question> questions = new ArrayList<>();
+
+                    for (int i = 0; i < questionsJson.length(); i++) {
+                        questions.add(new Question(questionsJson.getJSONObject(i)));
                     }
-                });
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            Toast.makeText(MainActivity.this, questions.get(0).title, Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                } catch (JSONException ignore) {}
             }
         });
     }
